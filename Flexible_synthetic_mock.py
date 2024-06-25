@@ -81,20 +81,26 @@ def generate_sequence(num_seqs, conserved_regions, total_length, gc_content=0.50
 
 def main():
     # Define conserved regions with positions (ie, primer sequences to be included)
-    # Format: (position, sequence)
+    # Format: list of lists for variants at each position. Sublist element = (position, sequence)
     conserved_regions = [
-        (0, "TTCTCAACCAACCACAAAGATATTGGATGAACTGTATATCCTCC"),  # COI_1F
-        (300, "GGWACWGGWTGAACWGTWTAYCCYCC"),                # COI_375F
-        (600, "AAGCCAATCTGATTCTTCGGTCACCCAGAAGTTTA")  # COI_750R
+    [(0, "TTCTCAACCAACCACAAAGATATTGGATGAACTGTATATCCTCC"), (0, "TTCTCAACCAACCACAAAGATATTGGATGAACTGTATATCCTCG")],  # Variants for position 0
+    [(300, "GGWACWGGWTGAACWGTWTAYCCYCC")],                                                                        # Single variant for position 300
+    [(600, "AAGCCAATCTGATTCTTCGGTCACCCAGAAGTTTA"), (600, "AAGCCAATCTGATTCTTCGGTCACCCAGAAGTTTTG")]  # Variants for position 600
     ]
-
     total_length = 700  # adjust as needed
 
-    sequences = generate_sequence(10, conserved_regions, total_length, 0.35)
+    # Generate all possible combinations of conserved regions
+    all_combinations = []
+    for region1 in conserved_regions[0]:
+        for region2 in conserved_regions[1]:
+            for region3 in conserved_regions[2]:
+                all_combinations.append([region1, region2, region3])
 
-    # Output sequences in FASTA format
-    for name, sequence in natsorted(sequences.items()):
-        print(f">{name}\n{sequence}")
+    for combination in all_combinations:
+        sequences = generate_sequence(1, combination, total_length, 0.35)
+        # Output sequences in FASTA format
+        for name, sequence in natsorted(sequences.items()):
+            print(f">{name}\n{sequence}")
 
 if __name__ == "__main__":
     main()
