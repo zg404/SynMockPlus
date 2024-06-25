@@ -4,9 +4,7 @@ This program is free software: you can redistribute it and/or modify it under th
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-Portions of this code are derived from [amptk](https://github.com/nextgenusfs/amptk), which is licensed under the BSD 2-Clause License. See the LICENSE file for details.
+Portions of this code are derived from Amptk <https://github.com/nextgenusfs/amptk>, which is licensed under the BSD 2-Clause License. See the LICENSE file for details.
   BSD 2-Clause License for Amptk software. Copyright (c) 2016, Jonathan M. Palmer All rights reserved.
   
   Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
