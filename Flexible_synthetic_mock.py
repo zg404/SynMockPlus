@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import random
+import itertools
 from natsort import natsorted
 from Bio.SeqUtils import gc_fraction as GC
 
@@ -90,14 +91,11 @@ def main():
     total_length = 700  # adjust as needed
 
     # Generate all possible combinations of conserved regions
-    all_combinations = []
-    for region1 in conserved_regions[0]:
-        for region2 in conserved_regions[1]:
-            for region3 in conserved_regions[2]:
-                all_combinations.append([region1, region2, region3])
+    all_combinations = list(itertools.product(*conserved_regions))
 
+    # Generate sequences for each combination
     for combination in all_combinations:
-        sequences = generate_sequence(1, combination, total_length, 0.35)
+        sequences = generate_sequence(1, combination, total_length, 0.50)
         # Output sequences in FASTA format
         for name, sequence in natsorted(sequences.items()):
             print(f">{name}\n{sequence}")
