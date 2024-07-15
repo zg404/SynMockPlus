@@ -1,10 +1,12 @@
-#!/usr/bin/env python
+# Synthetic mock sequence generator for ITS barcoding gene
+# Author: Zach Geurin, 2024-07-03
+# Modified script from Amptk to generate simulated gene sequences for mock community
 
 import random
 from natsort import natsorted
 from Bio.SeqUtils import gc_fraction as GC
 
-def random_seq(length, gc_content, max_homopolymer=4):
+def random_seq(length, gc_content, max_homopolymer=3):
     """Generates random DNA sequence with a specified length, GC content, and max homopolymer"""
     gc_count = int(length * gc_content / 2)
     at_count = int(length / 2) - gc_count
@@ -29,7 +31,7 @@ def main():
     # LSU_plus includes extended range for LR3 & LR5 primers
     LSU_plus = "TGACCTCAAATCAGGTAGGAGTACCCGCTGAACTTAAGCATATCAATAAGCGGAGGATGACAATTAACCACCGTGTATTCGTCCCGTCTTGAAACACGGTATAACATCAGGCAGTTTAAGTCGGCGAAGTTTCCCTCAGGA"
     
-    ''' Unused primers:
+    ''' Extra primers:
     ITS2 = "GCTGCGTTCTTCATCGATGC"
     fITS7 = "GTGARTCATCGAATCTTTG" 
     ITS3 = "GCATCGATGAAGAACGCAGC"
@@ -69,11 +71,11 @@ def main():
         its2_gc = round(GC(random_its2) * 100)
         # build the full sequence
         sequence = (
-            SSU
+            SSU # SSU with ITS1F primer 
             + random_its1
-            + FES.replace("NNNNNNNNNNNNNNNNNN", probe)
+            + FES.replace("NNNNNNNNNNNNNNNNNN", probe) # 5.8S with qPCR probe, ITS2_R, and ITS7_F primers 
             + random_its2
-            + LSU_plus
+            + LSU_plus # LSU extended with LR5 and LR3 primers
         )
         name = f"SynMock_{i};qPCR_probe={probe};Len_ITS1={its1_len};GC_ITS1={its1_gc};Len_ITS2={its2_len};GC_ITS2={its2_gc}"
         sequences[name] = sequence

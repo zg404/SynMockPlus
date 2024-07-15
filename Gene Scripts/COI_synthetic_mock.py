@@ -1,11 +1,15 @@
-#!/usr/bin/env python
+# Synthetic mock sequence generator for CO1 (cox1) barcoding gene
+# Author: Zach Geurin, 2024-07-03
 
 import random
 import itertools
 from natsort import natsorted
 from Bio.SeqUtils import gc_fraction as GC
 
-def random_seq(length, gc_content, max_homopolymer=4):
+# initiate global variable for sequence counter
+seq_counter = 1
+
+def random_seq(length, gc_content, max_homopolymer=4): # may hang if max_homopolymer is too low (<=3)
     """Generates random DNA sequence with a specified length, GC content, and max homopolymer"""
     # check if length is odd. If so, add 1 for calculations, then truncate the last base at the end
     odd_length = False
@@ -36,6 +40,9 @@ def random_seq(length, gc_content, max_homopolymer=4):
 def generate_sequence(num_seqs, conserved_regions, total_length, gc_content=0.50):
     """Builds simulated sequences with specified conserved regions and total length."""
     
+    # access global variable for sequence counter
+    global seq_counter
+
     # Perform couple checks for the input values
     # Check if total length is long enough for all conserved regions
     conserved_length = sum(len(seq) for _, seq in conserved_regions)
@@ -74,8 +81,9 @@ def generate_sequence(num_seqs, conserved_regions, total_length, gc_content=0.50
         # Calculate total GC content
         total_gc = round(GC(sequence) * 100)
 
-        name = f"SynMock_{i+1};length={len(sequence)};GC={total_gc}"
+        name = f"SynMock_{seq_counter};length={len(sequence)};GC={total_gc}"
         sequences_dict[name] = sequence
+        seq_counter += 1
 
     return sequences_dict
 
@@ -85,17 +93,20 @@ def main():
     # Format: list of lists for variants at each position. Sublist element = (position, sequence)
     conserved_regions = [
     [(0, "GGTCAACAAATCATAAAGATATTGG")], # COI_LC1490 primer at position 0
-    [(300, "GGAACAGGATGAACAGTATATCCTCC"),],  # mlCOIintF primer (W->A, Y->T) at position 300
-    [(600, "TGATTTTTTGGTCACCCTGAAGTTTA"),]  # COI_HCO2198 primer (reverse comp) at position 600
+    [(350, "GGAACAGGATGAACAGTATATCCTCC"),],  # mlCOIintF primer (W->A, Y->T) at position 350
+    [(700, "TGATTTTTTGGTCACCCTGAAGTTTA"),]  # COI_HCO2198 primer (reverse comp) at position 600
     ]
-    total_length = 700  # adjust as needed
+    # Edit these params as needed
+    total_length = 750  # total desired 
+    GC_content = 0.35   # desired GC content
+    num_replicates = 1  # number of replicates for each sequence combination generated
 
     # Generate all possible combinations of conserved regions
     all_combinations = list(itertools.product(*conserved_regions))
 
     # Generate sequences for each combination
     for combination in all_combinations:
-        sequences = generate_sequence(1, combination, total_length, 0.35)
+        sequences = generate_sequence(num_replicates, combination, total_length, GC_content)
         # Output sequences in FASTA format
         for name, sequence in natsorted(sequences.items()):
             print(f">{name}\n{sequence}")
