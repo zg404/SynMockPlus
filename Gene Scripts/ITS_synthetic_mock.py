@@ -6,7 +6,7 @@ import random
 from natsort import natsorted
 from Bio.SeqUtils import gc_fraction as GC
 
-def random_seq(length, gc_content, max_homopolymer=3):
+def random_seq(length, gc_content, max_homopolymer=4):
     """Generates random DNA sequence with a specified length, GC content, and max homopolymer"""
     gc_count = int(length * gc_content / 2)
     at_count = int(length / 2) - gc_count

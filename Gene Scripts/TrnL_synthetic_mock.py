@@ -1,4 +1,4 @@
-# Synthetic mock sequence generator for CO1 (cox1) barcoding gene
+# Synthetic mock sequence generator for trnL barcoding gene
 # Author: Zach Geurin, 2024-07-03
 
 import random
@@ -9,7 +9,7 @@ from Bio.SeqUtils import gc_fraction as GC
 # initiate global variable for sequence counter
 seq_counter = 1
 
-def random_seq(length, gc_content, max_homopolymer=4): # may hang if max_homopolymer is too low (<=3)
+def random_seq(length, gc_content, max_homopolymer=4):
     """Generates random DNA sequence with a specified length, GC content, and max homopolymer"""
     # check if length is odd. If so, add 1 for calculations, then truncate the last base at the end
     odd_length = False
@@ -84,7 +84,7 @@ def generate_sequence(num_seqs, conserved_regions, total_length, gc_content=0.50
         name = f"SynMock_{seq_counter};length={len(sequence)};GC={total_gc}"
         sequences_dict[name] = sequence
         seq_counter += 1
-
+        
     return sequences_dict
 
 
@@ -92,13 +92,13 @@ def main():
     # Define conserved regions with positions (ie, primer sequences to be included)
     # Format: list of lists for variants at each position. Sublist element = (position, sequence)
     conserved_regions = [
-    [(0, "GGTCAACAAATCATAAAGATATTGG")], # COI_LC1490 primer at position 0
-    [(300, "GGCACCGGCTGAACGGTGTATCCTCC")], # mlCOIintR primer at position 300 (R->A, S->C, )
-    [(350, "GGAACAGGATGAACAGTATATCCTCC"),],  # mlCOIintF primer (W->A, Y->T) at position 350
-    [(700, "TGATTTTTTGGTCACCCTGAAGTTTA"),]  # COI_HCO2198 primer (reverse comp) at position 600
+    [(0, "CGAAATCGGTAGACGCTACG")],  # trnL C primer (F)
+    [(100, "GGGGATAGAGGGACTTGAAC")],  # trnL G primer (F)
+    [(150, "TTGGCTCAGGATTGCCC")],    # trnL H primer (RC)
+    [(478, "GATAGGTGCAGAGACTCAATGG")]  # trnL D primer (RC)
     ]
     # Edit these params as needed
-    total_length = 750  # total desired length
+    total_length = 500  # total desired length
     GC_content = 0.35   # desired GC content
     num_replicates = 10  # number of replicates for each sequence combination generated
 
