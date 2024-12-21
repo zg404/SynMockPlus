@@ -15,5 +15,5 @@ The resulting gene-specific scripts are found in the Gene Scripts folder.
 `python ITS_synthetic_mock.py > SynMock_ITS.fasta`
 
 ### In progress:
-1. Finalizing conserved primers for CO1, 18S, 16S, rbcL, and trnL.
+1. Finalizing conserved primers for 18S, 16S, and rbcL.
 2. Generating sequence maps that show the structure and conserved primers within the random sequences.
